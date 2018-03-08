@@ -67,17 +67,17 @@ end
 # do...endと{}  do...endの代わりに{}を使う(1行でコンパクトに書きたいとき)
 num_bers = [1, 2, 3, 4]
 sum = 0
-num_bers.each {|n| sum += n}
+num_bers.each { |n| sum += n }
 p sum
 
 # mapメソッド(collect)  空の配列を用意して、他の配列をループ処理結果を空の配列に詰め込む処理の大半はmapメソッドに置き換えられる
 nums = [1, 2, 3, 4, 5]
-new_numbers = nums.map {|n| n * 10}
+new_numbers = nums.map { |n| n * 10 }
 p new_numbers
 
 # select / find_all  ブロックの戻り値が真になった要素だけを集められる
 numbers = [1, 2, 3, 4, 5, 6]
-even_numners = numbers.select {|n| n.even?}
+even_numners = numbers.select { |n| n.even? }
 p even_numners
 
 # rejectメソッド  selectメソッドの反対でブロックの戻り値が真になった要素を除外した配列を返す(falseを返すと同じ意味)
@@ -86,8 +86,77 @@ numbers = [1, 2, 3, 4, 5, 6]
 non_multiples_of_three = numbers.reject {|n| n % 3 == 0}
 p non_multiples_of_three
 
-# find / detect
+# find / detect ブロックの値が真になった最初の値を返す
+even_numner = numbers.find { |n| n.even? }
+p even_numner #=> 2
 
+#inject / reduce たたき込み演算を行うメソッド
+numbers = [1, 2, 3, 4]
+sum = 0
+sum = numbers.inject(0) { |result, n| result + n }
+p sum  #=> 10
+
+# &:メソッド =>使用条件①ブロック引数が1つ　②ブロック中で呼び出すメソッドに引数なし
+# ③ブロック中でブロック引数に対してメソッドを１買い呼び出すだけの処理
+  # 以下のコードは
+  u = [1, 2, 3, 4, 5, 6].select { |n| n.odd? }
+  p u
+  # 以下のように書き換え可能
+  v = [1, 2, 3, 4, 5, 6].select(&:odd?)
+  p v
+
+# Range（範囲）
+ w = [1, 2, 3, 4, 5]
+ p  w[1..3]  #=>[2, 3, 4]
+ p  w[1...3] #=>[2, 3]  末尾が含まれない
+
+ # n以上n未満などの判定をRangeで書く
+ def liquid?(temperature)
+   (0...100).include?(temperature)
+ end
+
+p liquid?(-1)
+p liquid?(0)
+p liquid?(99)
+p liquid?(100)
+
+# case文とrange
+def charge(age)
+  case age
+  # 0際から5際までの場合
+  when 0..5
+    0
+  # 6際から12際までの場合
+  when 6..12
+    300
+  # 13際から18際までの場合
+  when 13..18
+    600
+  #それ以外
+  else
+    1000
+  end
+end
+
+p charge(3)
+p charge(12)
+p charge(16)
+p charge(25)
+
+# 値が連続する配列を作成する
+p (1..5).to_a
+p ('bad'..'bag').to_a  #面白い
+p [*1..5]
+
+#Rangeと繰り返し処理
+sum = 0
+(1..4).each { |n| sum += n }
+p sum
+
+#stepメソッド  1から10まで2つ飛ばしで繰り返し処理を行う
+numbers = []
+(1..10).step(2) { |n| numbers << n }  # <<　は、末尾に代入していく
+p numbers
 
 # 破壊的な連結
 b = [1]
